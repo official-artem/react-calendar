@@ -1,0 +1,4 @@
+:root {
+  --header-height: 2rem;
+  --calendar-height: calc(100vh - var(--header-height));
+}
