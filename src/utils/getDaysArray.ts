@@ -2,16 +2,10 @@ import { DayType } from '../data/types/day.type';
 
 export function GetArrayOfDays(date: Date): DayType[] {
   const currentDate = date;
-  const currentMonth = currentDate.getMonth();
+  const currentMonth = currentDate.getUTCMonth();
   const currentYear = currentDate.getFullYear();
 
-  const daysInMonthArray: DayType[] = Array.from(
-    { length: new Date(currentYear, currentMonth + 1, 0).getDate() },
-    (_, index) => ({
-      day: index + 1,
-      id: crypto.randomUUID(),
-    })
-  );
+  const daysInMonthArray: DayType[] = [];
 
   const firstDay = new Date(currentYear, currentMonth, 1).getDay();
 
@@ -19,6 +13,18 @@ export function GetArrayOfDays(date: Date): DayType[] {
     daysInMonthArray.unshift({
       day: null,
       id: crypto.randomUUID(),
+      labels: [],
+      tasks: [],
+    });
+  }
+
+  const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  for (let day = 1; day <= lastDayOfMonth; ++day) {
+    daysInMonthArray.push({
+      day: new Date(currentYear, currentMonth, day, 2),
+      id: crypto.randomUUID(),
+      labels: [],
+      tasks: []
     });
   }
 
