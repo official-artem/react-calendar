@@ -1,11 +1,13 @@
 
 import styled from 'styled-components';
 import CreateEventButton from './CreateEventButton';
+import SmallCalendar from './SmallCalendar';
 
 export default function SideBar() {
   return (
     <AsideContainer>
       <CreateEventButton />
+      <SmallCalendar />
     </AsideContainer>
   );
 }

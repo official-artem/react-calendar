@@ -1,8 +1,16 @@
+import { useCallback, useContext } from 'react';
 import styled from 'styled-components';
+import GlobalContext from '../context/GlobalContext';
 
 export default function CreateEventButton() {
+  const { setShowEventModal } = useContext(GlobalContext);
+
+  const handleClick = useCallback(() => {
+    setShowEventModal(true);
+  }, [setShowEventModal]);
+
   return (
-    <EventButton>
+    <EventButton onClick={handleClick}>
       <span className="material-symbols-outlined">add</span>
       <CreateText>Create</CreateText>
     </EventButton>

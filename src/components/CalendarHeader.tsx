@@ -21,8 +21,14 @@ export default function CalendarHeader() {
   }, [monthIndex, setMonthIndex]);
 
   const handleReset = useCallback(() => {
+    if (monthIndex === new Date().getMonth()) {
+      console.log(1);
+        setMonthIndex(monthIndex + Math.random())
+        return;
+    }
+
     setMonthIndex(new Date().getMonth())
-  }, [setMonthIndex]);
+  }, [monthIndex, setMonthIndex]);
 
   return (
     <Header>

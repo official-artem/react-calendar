@@ -6,7 +6,7 @@ interface Props {
   month: Date[][];
 }
 
-export default function Month({ month }: Props) {
+export default function Month({ month }: Readonly<Props>) {
   return (
     <Container>
       {month.map((row, i) => (

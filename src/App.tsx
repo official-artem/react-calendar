@@ -6,10 +6,9 @@ import SideBar from './components/Sidebar';
 import Month from './components/Month';
 import CalendarHeader from './components/CalendarHeader';
 import GlobalContext from './context/GlobalContext';
-
 function App() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
-  const { monthIndex } = useContext(GlobalContext);
+  const { monthIndex, showEventModal } = useContext(GlobalContext);
 
 useEffect(() => {
   setCurrentMonth(getMonth(monthIndex))
@@ -17,6 +16,7 @@ useEffect(() => {
 
   return (
     <React.Fragment>
+      {showEventModal && <EventModal />}
       <MainContainer>
         <CalendarHeader />
         <CalendarContainer>
@@ -27,6 +27,7 @@ useEffect(() => {
     </React.Fragment>
   )
 }
+import EventModal from './components/EventModal';
 
 export default App
 

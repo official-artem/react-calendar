@@ -1,5 +1,7 @@
-import { memo, useMemo } from 'react';
+import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import styled, { css } from 'styled-components';
+import GlobalContext from '../context/GlobalContext';
+import { EventType } from '../data/types/event.type';
 
 interface Props {
   day: Date;
@@ -7,9 +9,28 @@ interface Props {
 }
 
 const LOCALES_PARAMS = 'en-US';
+const EVENT_FORMAT: Intl.DateTimeFormatOptions = {
+  day: '2-digit',
+  month: 'short',
+  year: '2-digit'
+}
 
 export default memo(
   function Day({ day, rowIdx }: Readonly<Props>) {
+    const { setDaySelected, setShowEventModal, savedEvents, setSelectedEvent } = useContext(GlobalContext);
+    const [dayEvents, setDayEvents] = useState<EventType[]>([]);
+
+    useEffect(() => {
+      const events = savedEvents.filter(evt => {
+        const formattedValue = new Date(evt.day).toLocaleDateString(LOCALES_PARAMS, EVENT_FORMAT);
+        const formattedDay = day.toLocaleDateString(LOCALES_PARAMS, EVENT_FORMAT);
+
+        return formattedDay === formattedValue;
+      });
+
+      setDayEvents(events);
+    }, [day, savedEvents]);
+
     const getCurrentDay = useMemo(() => {
       const currentDate = new Date();
       const currentYear = currentDate.getFullYear()
@@ -30,6 +51,11 @@ export default memo(
       return { dayOfWeek, dayOfMonth };
     }, [day]);
 
+    const handleCLick = useCallback(() => {
+      setDaySelected(day);
+      setShowEventModal(true);
+    }, [day, setDaySelected, setShowEventModal])
+
     return (
       <Container>
         <Header>
@@ -42,10 +68,35 @@ export default memo(
             {formattedDate.dayOfMonth}
           </DayText>
         </Header>
+        <Div onClick={handleCLick}>
+          {dayEvents.map((event) => (
+            <Event onClick={() => setSelectedEvent(event)} key={event.id} $bgColor={event.label}>
+              {event.title}
+            </Event>
+          ))}
+        </Div>
       </Container>
     );
   }
 )
+
+const Event = styled.div<{ $bgColor: string; }>`
+  background-color: ${(props) => props.$bgColor};
+  padding: 0.25rem;
+  margin-right: 0.75rem;
+  font-size: 0.875rem;
+  border-radius: 0.25rem;
+  margin-bottom: 0.25rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: white
+`;
+
+const Div = styled.div`
+  flex: 1;
+  cursor: pointer;
+`
 
 const Container = styled.div`
   border: 1px solid #e5e7eb;
