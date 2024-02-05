@@ -1,6 +1,6 @@
 # React Calendar
 
-[DEMO]('https://official-artem.github.io/react-calendar/')
+[DEMO](https://official-artem.github.io/react-calendar/)
 
 Technologies I used:
 - React
