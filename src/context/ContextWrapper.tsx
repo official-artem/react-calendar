@@ -31,12 +31,30 @@ export default function ContextWrapper({ children }: Readonly<{ children: ReactN
   const [smallCalendarMonth, setSmallCalendarMonth] = useState<null | number>(null);
   const [daySelected, setDaySelected] = useState<Date>(new Date());
   const [showEventModal, setShowEventModal] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<null | EventType>(null);
-  const [savedEvents, dispatchCalEvent] = useReducer(savedEventsReducer, [], initEvents);
+  const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
+  // const [labels, setLabels] = useState<{ label: Label, checked: boolean | Label}[]>([]);
+  const [savedEvents, dispatchCalEvent] = useReducer(
+    savedEventsReducer,
+    [],
+    initEvents);
 
   useEffect(() => {
     localStorage.setItem('savedEvents', JSON.stringify(savedEvents));
   }, [savedEvents]);
+
+  // useEffect(() => {
+  //   setLabels((prevLabels) => {
+  //     return [...new Set(savedEvents.map(evt => evt.label))]
+  //       .map(label => {
+  //         const currentLabel = prevLabels.find(lbl => lbl.label.title === label);
+
+  //         return {
+  //           label,
+  //           checked: currentLabel ? currentLabel.label.title : true
+  //         };
+  //       });
+  //   });
+  // }, [savedEvents]);
 
   useEffect(() => {
     if (smallCalendarMonth !== null) {

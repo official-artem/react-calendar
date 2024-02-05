@@ -7,16 +7,19 @@ interface Props {
 }
 
 export default function Month({ month }: Readonly<Props>) {
+
   return (
-    <Container>
-      {month.map((row, i) => (
-        <React.Fragment key={i}>
-          {row.map((day, idx) => (
-            <Day day={day} key={idx} rowIdx={i}/>
+    <>
+      <Container>
+          {month.map((row, i) => (
+            <React.Fragment key={i}>
+              {row.map((day, idx) => (
+                <Day day={day} key={idx} rowIdx={i}/>
+              ))}
+            </React.Fragment>
           ))}
-        </React.Fragment>
-      ))}
-    </Container>
+      </Container>
+    </>
   );
 }
 
@@ -25,4 +28,4 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(5, 1fr);
-`;
+`

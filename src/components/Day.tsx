@@ -2,6 +2,7 @@ import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'rea
 import styled, { css } from 'styled-components';
 import GlobalContext from '../context/GlobalContext';
 import { EventType } from '../data/types/event.type';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 interface Props {
   day: Date;
@@ -57,25 +58,40 @@ export default memo(
     }, [day, setDaySelected, setShowEventModal])
 
     return (
-      <Container>
-        <Header>
-          {rowIdx === 0 && (
-            <Title>
-              {formattedDate.dayOfWeek}
-            </Title>
-          )}
-          <DayText $selected={getCurrentDay}>
-            {formattedDate.dayOfMonth}
-          </DayText>
-        </Header>
-        <Div onClick={handleCLick}>
-          {dayEvents.map((event) => (
-            <Event onClick={() => setSelectedEvent(event)} key={event.id} $bgColor={event.label}>
-              {event.title}
-            </Event>
-          ))}
-        </Div>
-      </Container>
+      <Droppable droppableId={String(day.getTime())}>
+        {(provided) => (
+            <Container>
+          <Header>
+            {rowIdx === 0 && (
+              <Title>
+                {formattedDate.dayOfWeek}
+              </Title>
+            )}
+            <DayText $selected={getCurrentDay}>
+              {formattedDate.dayOfMonth}
+            </DayText>
+          </Header>
+            <Div ref={provided.innerRef} {...provided.droppableProps} onClick={handleCLick}>
+            {dayEvents.map((event, index) => (
+              <Draggable key={event.id} draggableId={String(event.id)} index={index}>
+                {(provided) => (
+                  <Event
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    onClick={() => setSelectedEvent(event)}
+                    $bgColor={event.label}
+                  >
+                    {event.title}
+                  </Event>
+                )}
+              </Draggable>
+            ))}
+          </Div>
+        {provided.placeholder}
+          </Container>
+    )}
+      </Droppable >
     );
   }
 )

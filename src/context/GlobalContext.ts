@@ -14,7 +14,9 @@ interface State {
   dispatchCalEvent: React.Dispatch<DispatchEvent>;
   savedEvents: EventType[],
   selectedEvent: null | EventType;
-  setSelectedEvent: React.Dispatch<React.SetStateAction<EventType | null>>;
+  setSelectedEvent: React.Dispatch<React.SetStateAction<EventType | null>>
+  // labels: Labels[];
+  // setLabels: React.Dispatch<React.SetStateAction<Labels[]>>;
 }
 
 const GlobalContext = createContext<State>({
@@ -30,6 +32,8 @@ const GlobalContext = createContext<State>({
   savedEvents: [],
   selectedEvent: null,
   setSelectedEvent: () => {},
+  // labels: [],
+  // setLabels: () => {},
 })
 
 export default GlobalContext;

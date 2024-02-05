@@ -66,6 +66,7 @@ export default function EventModal() {
       day: daySelected.getTime(),
       id: selectedEvent ? selectedEvent.id : Date.now(),
     };
+    console.log(new Date(+calendarEvent.id))
     if (selectedEvent) {
       dispatchCalEvent({ type: 'update', payload: calendarEvent });
     } else {

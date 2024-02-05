@@ -6,28 +6,54 @@ import SideBar from './components/Sidebar';
 import Month from './components/Month';
 import CalendarHeader from './components/CalendarHeader';
 import GlobalContext from './context/GlobalContext';
+import { DragDropContext } from 'react-beautiful-dnd';
+import EventModal from './components/EventModal';
+import { DispatchEvent } from './data/types/dispatchEvent.type';
+
 function App() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
-  const { monthIndex, showEventModal } = useContext(GlobalContext);
+  const { monthIndex, showEventModal, savedEvents, dispatchCalEvent } = useContext(GlobalContext);
 
-useEffect(() => {
-  setCurrentMonth(getMonth(monthIndex))
-}, [monthIndex])
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleOnDragEnd = (result: any) => {
+    const { destination, draggableId } = result;
+
+  const calendarEvent = savedEvents.find(event => event.id === +(draggableId))
+
+  if (!calendarEvent) {
+    return;
+  }
+
+    const payload: DispatchEvent = { type: 'update', payload: {
+      ...calendarEvent, day: +destination.droppableId
+    } }
+
+    dispatchCalEvent(payload);
+
+    // if (!destination || source.droppableId === destination.droppableId) {
+    //   return;
+    // }
+  }
+
+  useEffect(() => {
+    setCurrentMonth(getMonth(monthIndex))
+  }, [monthIndex])
 
   return (
     <React.Fragment>
       {showEventModal && <EventModal />}
       <MainContainer>
         <CalendarHeader />
-        <CalendarContainer>
-          <SideBar />
-          <Month month={currentMonth}/>
-        </CalendarContainer>
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          <CalendarContainer>
+            <SideBar />
+            <Month month={currentMonth} />
+          </CalendarContainer>
+        </DragDropContext>
       </MainContainer>
     </React.Fragment>
   )
 }
-import EventModal from './components/EventModal';
 
 export default App
 
