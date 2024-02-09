@@ -69,6 +69,10 @@ export default function ContextWrapper({ children }: Readonly<{ children: ReactN
     }
   }, [smallCalendarMonth]);
 
+  useEffect(() => {
+    if (!showEventModal) setSelectedEvent(null)
+  }, [showEventModal])
+
   const obj = useMemo(() => ({
     monthIndex,
     setMonthIndex,
