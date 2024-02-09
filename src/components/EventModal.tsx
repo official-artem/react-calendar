@@ -4,6 +4,7 @@ import GlobalContext from '../context/GlobalContext';
 import { labels } from '../data/labels';
 import { EventType } from '../data/types/event.type';
 import { DispatchEvent } from '../data/types/dispatchEvent.type';
+import { Label as LabelType} from '../data/types/label.type';
 
 export default function EventModal() {
   const {
@@ -15,12 +16,12 @@ export default function EventModal() {
   } = useContext(GlobalContext);
   const [title, setTitle] = useState(selectedEvent ? selectedEvent.title : '');
   const [description, setDescription] = useState(selectedEvent ? selectedEvent.description : '');
-  const [selectedLabel, setSelectedLabel] = useState(() => {
+  const [selectedLabel, setSelectedLabel] = useState<LabelType>(() => {
     if (selectedEvent) {
-      labels.find(label => label.hexFormat === selectedEvent.label);
+      labels.find(label => label.title === selectedEvent.label.title);
     }
 
-    return labels[0].hexFormat;
+    return labels[0];
   });
 
   const handleClickClose = useCallback(() => {
@@ -52,8 +53,8 @@ export default function EventModal() {
     return value;
   }, [daySelected]);
 
-  const handleSelectLabel = useCallback((labelId: string) => {
-    setSelectedLabel(labelId);
+  const handleSelectLabel = useCallback((label: LabelType) => {
+    setSelectedLabel(label);
   }, []);
 
   const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
@@ -142,10 +143,10 @@ export default function EventModal() {
               bookmark_border
             </Icon>
             <LabelContainer>
-              {labels.map(({ id, hexFormat }) => (
-                <Label onClick={() => handleSelectLabel(hexFormat)} key={id} $color={hexFormat}>
+              {labels.map((label) => (
+                <Label onClick={() => handleSelectLabel(label)} key={label.id} $color={label.hexFormat}>
 
-                  {selectedLabel === hexFormat && (
+                  {selectedLabel.hexFormat === label.hexFormat && (
                     <Icon className='material-symbols-outlined' $labelStyles={true}>
                       check
                     </Icon>

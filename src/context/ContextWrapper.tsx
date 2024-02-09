@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useMemo, useReducer, useState } from 'react';
 import { DispatchEvent } from '../data/types/dispatchEvent.type';
 import { EventType } from '../data/types/event.type';
 import GlobalContext from './GlobalContext';
+import { SidebarLabel } from '../data/types/label.type';
 
 function savedEventsReducer(state: EventType[], { type, payload }: DispatchEvent) {
   switch (type) {
@@ -32,29 +33,35 @@ export default function ContextWrapper({ children }: Readonly<{ children: ReactN
   const [daySelected, setDaySelected] = useState<Date>(new Date());
   const [showEventModal, setShowEventModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
-  // const [labels, setLabels] = useState<{ label: Label, checked: boolean | Label}[]>([]);
+  const [labels, setLabels] = useState<SidebarLabel[]>([]);
   const [savedEvents, dispatchCalEvent] = useReducer(
     savedEventsReducer,
     [],
     initEvents);
+  const filteredEvents = useMemo(() => {
+    return savedEvents.filter(evt =>
+      labels
+        .filter(lbl => lbl.checked)
+        .map((lbl) => lbl.label)
+        .includes(evt.label.title));
+  }, [labels, savedEvents])
 
   useEffect(() => {
     localStorage.setItem('savedEvents', JSON.stringify(savedEvents));
   }, [savedEvents]);
 
-  // useEffect(() => {
-  //   setLabels((prevLabels) => {
-  //     return [...new Set(savedEvents.map(evt => evt.label))]
-  //       .map(label => {
-  //         const currentLabel = prevLabels.find(lbl => lbl.label.title === label);
-
-  //         return {
-  //           label,
-  //           checked: currentLabel ? currentLabel.label.title : true
-  //         };
-  //       });
-  //   });
-  // }, [savedEvents]);
+  useEffect(() => {
+    setLabels((prevLabels) => {
+      return [...new Set(savedEvents.map(evt => evt.label.title))]
+        .map(label => {
+          const currentLabel = prevLabels.find(lbl => lbl.label === label);
+          return {
+            label,
+            checked: currentLabel ? currentLabel.checked : true
+          };
+        });
+    });
+  }, [savedEvents]);
 
   useEffect(() => {
     if (smallCalendarMonth !== null) {
@@ -75,7 +82,19 @@ export default function ContextWrapper({ children }: Readonly<{ children: ReactN
     savedEvents,
     selectedEvent,
     setSelectedEvent,
-  }), [daySelected, monthIndex, savedEvents, selectedEvent, showEventModal, smallCalendarMonth]);
+    labels,
+    setLabels,
+    filteredEvents
+  }), [
+    daySelected, 
+    filteredEvents, 
+    labels, 
+    monthIndex, 
+    savedEvents, 
+    selectedEvent, 
+    showEventModal, 
+    smallCalendarMonth
+  ]);
 
   return (
     <GlobalContext.Provider value={obj}>

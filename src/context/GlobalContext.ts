@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, createContext } from 'react';
 import { DispatchEvent } from '../data/types/dispatchEvent.type';
 import { EventType } from '../data/types/event.type';
+import { SidebarLabel } from '../data/types/label.type';
 
 interface State {
   monthIndex: number;
@@ -15,8 +16,9 @@ interface State {
   savedEvents: EventType[],
   selectedEvent: null | EventType;
   setSelectedEvent: React.Dispatch<React.SetStateAction<EventType | null>>
-  // labels: Labels[];
-  // setLabels: React.Dispatch<React.SetStateAction<Labels[]>>;
+  labels: SidebarLabel[];
+  setLabels: React.Dispatch<React.SetStateAction<SidebarLabel[]>>;
+  filteredEvents: EventType[],
 }
 
 const GlobalContext = createContext<State>({
@@ -32,8 +34,9 @@ const GlobalContext = createContext<State>({
   savedEvents: [],
   selectedEvent: null,
   setSelectedEvent: () => {},
-  // labels: [],
-  // setLabels: () => {},
+  labels: [],
+  setLabels: () => {},
+  filteredEvents: []
 })
 
 export default GlobalContext;

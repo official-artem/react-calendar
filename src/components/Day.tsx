@@ -18,11 +18,11 @@ const EVENT_FORMAT: Intl.DateTimeFormatOptions = {
 
 export default memo(
   function Day({ day, rowIdx }: Readonly<Props>) {
-    const { setDaySelected, setShowEventModal, savedEvents, setSelectedEvent } = useContext(GlobalContext);
+    const { setDaySelected, setShowEventModal, filteredEvents, setSelectedEvent } = useContext(GlobalContext);
     const [dayEvents, setDayEvents] = useState<EventType[]>([]);
 
     useEffect(() => {
-      const events = savedEvents.filter(evt => {
+      const events = filteredEvents.filter(evt => {
         const formattedValue = new Date(evt.day).toLocaleDateString(LOCALES_PARAMS, EVENT_FORMAT);
         const formattedDay = day.toLocaleDateString(LOCALES_PARAMS, EVENT_FORMAT);
 
@@ -30,7 +30,7 @@ export default memo(
       });
 
       setDayEvents(events);
-    }, [day, savedEvents]);
+    }, [day, filteredEvents]);
 
     const getCurrentDay = useMemo(() => {
       const currentDate = new Date();
@@ -80,7 +80,7 @@ export default memo(
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     onClick={() => setSelectedEvent(event)}
-                    $bgColor={event.label}
+                    $bgColor={event.label.hexFormat}
                   >
                     {event.title}
                   </Event>
@@ -106,12 +106,14 @@ const Event = styled.div<{ $bgColor: string; }>`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: white
+  color: white;
+  margin: 0 auto;
 `;
 
 const Div = styled.div`
   flex: 1;
   cursor: pointer;
+  overflow: hidden
 `
 
 const Container = styled.div`
