@@ -12,7 +12,8 @@ export default function EventModal() {
     daySelected,
     dispatchCalEvent,
     selectedEvent,
-    setSelectedEvent
+    setSelectedEvent,
+    savedEvents
   } = useContext(GlobalContext);
   const [title, setTitle] = useState(selectedEvent ? selectedEvent.title : '');
   const [description, setDescription] = useState(selectedEvent ? selectedEvent.description : '');
@@ -23,6 +24,13 @@ export default function EventModal() {
 
     return labels[0];
   });
+
+
+  const eventsCount = useMemo(() => {
+    const formattedDay = new Date(daySelected).getTime();
+
+    return savedEvents.filter(event => event.day === formattedDay).length;
+  }, [daySelected, savedEvents])
 
   const handleClickClose = useCallback(() => {
     setShowEventModal(false);
@@ -66,8 +74,9 @@ export default function EventModal() {
       label: selectedLabel,
       day: daySelected.getTime(),
       id: selectedEvent ? selectedEvent.id : Date.now(),
+      index: eventsCount,
     };
-    console.log(new Date(+calendarEvent.id))
+
     if (selectedEvent) {
       dispatchCalEvent({ type: 'update', payload: calendarEvent });
     } else {
@@ -75,15 +84,7 @@ export default function EventModal() {
     }
 
     setShowEventModal(false);
-  }, [
-    daySelected,
-    description,
-    dispatchCalEvent,
-    selectedEvent,
-    selectedLabel,
-    setShowEventModal,
-    title
-  ]);
+  }, [daySelected, description, dispatchCalEvent, eventsCount, selectedEvent, selectedLabel, setShowEventModal, title]);
 
   const handleDeleteEvent = useCallback((event: DispatchEvent) => {
     dispatchCalEvent(event);

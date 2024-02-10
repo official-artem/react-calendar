@@ -6,4 +6,5 @@ export interface EventType {
   label: Label;
   day: number;
   id: number;
+  index: number
 }

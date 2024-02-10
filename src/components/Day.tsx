@@ -79,7 +79,7 @@ export default memo(
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    onClick={() => setSelectedEvent(event)}
+                    onMouseUpCapture={() => setSelectedEvent(event)}
                     $bgColor={event.label.hexFormat}
                   >
                     {event.title}

@@ -4,7 +4,7 @@ import { EventType } from '../data/types/event.type';
 import GlobalContext from './GlobalContext';
 import { SidebarLabel } from '../data/types/label.type';
 
-function savedEventsReducer(state: EventType[], { type, payload }: DispatchEvent) {
+function savedEventsReducer(state: EventType[], { type, payload, destIndex }: DispatchEvent) {
   switch (type) {
     case 'push':
       return [...state, payload];
@@ -14,6 +14,20 @@ function savedEventsReducer(state: EventType[], { type, payload }: DispatchEvent
 
     case 'delete':
       return state.filter(evt => evt.id !== payload.id);
+
+    case 'move':
+      {
+        if (destIndex === undefined) {
+          console.log(1);
+          return [...state]
+        }
+
+        const updated = [...state];
+        updated.filter(event => event.id !== payload.id);
+        updated.splice(destIndex, 0, payload);
+        
+        return updated;
+      }
 
     default:
       throw new Error();

@@ -9,6 +9,7 @@ import GlobalContext from './context/GlobalContext';
 import { DragDropContext } from 'react-beautiful-dnd';
 import EventModal from './components/EventModal';
 import { DispatchEvent } from './data/types/dispatchEvent.type';
+import { EventType } from './data/types/event.type';
 
 function App() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
@@ -18,21 +19,18 @@ function App() {
   const handleOnDragEnd = (result: any) => {
     const { destination, draggableId } = result;
 
-  const calendarEvent = savedEvents.find(event => event.id === +(draggableId))
+    const selectedEvent = savedEvents.find(event => event.id === +(draggableId)) as EventType;
 
-  if (!calendarEvent) {
-    return;
-  }
+      const payload: DispatchEvent = {
+        type: 'move', destIndex: +(destination.index),
+        payload: {
+          ...selectedEvent, day: +destination.droppableId
+        }
+      };
 
-    const payload: DispatchEvent = { type: 'update', payload: {
-      ...calendarEvent, day: +destination.droppableId
-    } }
+      console.log(result)
 
-    dispatchCalEvent(payload);
-
-    // if (!destination || source.droppableId === destination.droppableId) {
-    //   return;
-    // }
+      dispatchCalEvent(payload);
   }
 
   useEffect(() => {
