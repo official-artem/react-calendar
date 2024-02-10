@@ -35,7 +35,14 @@ export default function DownloadJSON() {
       dispatchCalEvent({
         type: 'import',
         events: events,
-        payload: []
+        payload: {
+          id: 0,
+          index: 0,
+          title: '',
+          label: {id: 0, title: '', hexFormat: ''},
+          description: '',
+          day: 0,
+        }
       });
     };
 
@@ -43,18 +50,36 @@ export default function DownloadJSON() {
   };
 
   return (
-    <div>
+    <Container>
       <ButtonDownload onClick={handleCLick}>Export</ButtonDownload>
-      <input type="file" accept=".json" onChange={handleFileChange} />
-    </div>
+      <ImportLabel htmlFor='file-upload'>
+        Import
+        <ImportInput type="file" accept=".json" onChange={handleFileChange} id="file-upload" />
+      </ImportLabel>
+    </Container>
   );
 }
+const Container = styled.div`
+  display: flex;
+  gap: 1rem;
+  font-size: 1rem;
+`
 
 const ButtonDownload = styled.button`
-margin-left: 2rem;
+  margin-left: 2rem;
   border: 2px solid #585858;
   padding: 0.5rem;
   border-radius: 0.5rem;
   cursor: pointer;
 `;
+
+const ImportLabel = styled.label`
+  cursor: pointer;
+  border: 2px solid #585858;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+`
+
+const ImportInput = styled.input`
+display: none`
 

@@ -35,18 +35,20 @@ export default function CalendarHeader() {
     <Header>
       <Logo src={logo} alt='calendar' />
       <Title>Calendar</Title>
-      <TodayButton onClick={handleReset}>Today</TodayButton>
-      <ArrowButton onClick={handlePrevMonth}>
-        <ArrowIcon className="material-symbols-outlined">
-          chevron_left
-        </ArrowIcon>
-      </ArrowButton>
-
-      <ArrowButton onClick={handleNextMonth}>
-        <ArrowIcon className="material-symbols-outlined">
-          chevron_right
-        </ArrowIcon>
-      </ArrowButton>
+      
+      <Container>
+        <ArrowButton onClick={handlePrevMonth}>
+          <ArrowIcon className="material-symbols-outlined">
+            chevron_left
+          </ArrowIcon>
+        </ArrowButton>
+        <TodayButton onClick={handleReset}>Today</TodayButton>
+        <ArrowButton onClick={handleNextMonth}>
+          <ArrowIcon className="material-symbols-outlined">
+            chevron_right
+          </ArrowIcon>
+        </ArrowButton>
+      </Container>
 
       <YearTitle>{formattedCurrentData}</YearTitle>
 
@@ -55,10 +57,15 @@ export default function CalendarHeader() {
   );
 }
 
+const Container = styled.div`
+  display: flex;
+`
+
 const Header = styled.header`
   padding: 0.5rem 1rem;
   display: flex;
   align-items: center;
+  justify-content: space-between
 `;
 
 
@@ -95,6 +102,7 @@ const YearTitle = styled.h2`
   font-size: 1.2rem;
   font-weight: bold;
   color: #6b7280;
+  width: 10rem;
 `;
 
 const ArrowButton = styled.button``;

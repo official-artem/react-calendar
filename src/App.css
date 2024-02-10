@@ -8,6 +8,10 @@ html {
   font-family: 'Open Sans', sans-serif;
 }
 
+button {
+  font-size: inherit;
+}
+
 a {
   text-decoration: none;
   color: inherit;
