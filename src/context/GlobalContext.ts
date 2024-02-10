@@ -18,7 +18,9 @@ interface State {
   setSelectedEvent: React.Dispatch<React.SetStateAction<EventType | null>>
   labels: SidebarLabel[];
   setLabels: React.Dispatch<React.SetStateAction<SidebarLabel[]>>;
-  filteredEvents: EventType[],
+  filteredEvents: EventType[];
+  currentMonth: Date[][];
+  setCurrentMonth: React.Dispatch<React.SetStateAction<Date[][]>>;
 }
 
 const GlobalContext = createContext<State>({
@@ -36,7 +38,9 @@ const GlobalContext = createContext<State>({
   setSelectedEvent: () => {},
   labels: [],
   setLabels: () => {},
-  filteredEvents: []
+  filteredEvents: [],
+  currentMonth: [],
+  setCurrentMonth: () => {},
 })
 
 export default GlobalContext;

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import logo from '/calendar-icon.svg';
 import { useCallback, useContext, useMemo } from 'react';
 import GlobalContext from '../context/GlobalContext';
+import DownloadJSON from './downloadJson';
 
 export default function CalendarHeader() {
   const { monthIndex, setMonthIndex } = useContext(GlobalContext);
@@ -48,6 +49,8 @@ export default function CalendarHeader() {
       </ArrowButton>
 
       <YearTitle>{formattedCurrentData}</YearTitle>
+
+      <DownloadJSON />
     </Header>
   );
 }
@@ -57,6 +60,8 @@ const Header = styled.header`
   display: flex;
   align-items: center;
 `;
+
+
 
 const Logo = styled.img`
   margin-right: 0.5rem;

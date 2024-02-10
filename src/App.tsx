@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import './App.css'
 import { getMonth } from './utils/utils';
 import styled from 'styled-components';
@@ -12,9 +12,7 @@ import { DispatchEvent } from './data/types/dispatchEvent.type';
 import { EventType } from './data/types/event.type';
 
 function App() {
-  const [currentMonth, setCurrentMonth] = useState(getMonth());
-  const { monthIndex, showEventModal, savedEvents, dispatchCalEvent } = useContext(GlobalContext);
-
+  const { monthIndex, currentMonth, setCurrentMonth, showEventModal, savedEvents, dispatchCalEvent } = useContext(GlobalContext);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleOnDragEnd = (result: any) => {
     const { destination, draggableId } = result;

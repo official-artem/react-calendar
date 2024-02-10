@@ -3,8 +3,9 @@ import { DispatchEvent } from '../data/types/dispatchEvent.type';
 import { EventType } from '../data/types/event.type';
 import GlobalContext from './GlobalContext';
 import { SidebarLabel } from '../data/types/label.type';
+import { getMonth } from '../utils/utils';
 
-function savedEventsReducer(state: EventType[], { type, payload, destIndex }: DispatchEvent) {
+function savedEventsReducer(state: EventType[], { type, payload, destIndex, events }: DispatchEvent) {
   switch (type) {
     case 'push':
       return [...state, payload];
@@ -15,6 +16,13 @@ function savedEventsReducer(state: EventType[], { type, payload, destIndex }: Di
     case 'delete':
       return state.filter(evt => evt.id !== payload.id);
 
+    case 'import':
+      if (!Array.isArray(events)) {
+        return [...state];
+      }
+  
+      return [...events];
+
     case 'move':
       {
         if (destIndex === undefined) {
@@ -22,8 +30,7 @@ function savedEventsReducer(state: EventType[], { type, payload, destIndex }: Di
           return [...state]
         }
 
-        const updated = [...state];
-        updated.filter(event => event.id !== payload.id);
+        const updated = [...state].filter(event => event.id !== payload.id);
         updated.splice(destIndex, 0, payload);
         
         return updated;
@@ -48,6 +55,7 @@ export default function ContextWrapper({ children }: Readonly<{ children: ReactN
   const [showEventModal, setShowEventModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
   const [labels, setLabels] = useState<SidebarLabel[]>([]);
+  const [currentMonth, setCurrentMonth] = useState(getMonth());
   const [savedEvents, dispatchCalEvent] = useReducer(
     savedEventsReducer,
     [],
@@ -102,17 +110,10 @@ export default function ContextWrapper({ children }: Readonly<{ children: ReactN
     setSelectedEvent,
     labels,
     setLabels,
-    filteredEvents
-  }), [
-    daySelected, 
-    filteredEvents, 
-    labels, 
-    monthIndex, 
-    savedEvents, 
-    selectedEvent, 
-    showEventModal, 
-    smallCalendarMonth
-  ]);
+    filteredEvents,
+    currentMonth,
+    setCurrentMonth
+  }), [currentMonth, daySelected, filteredEvents, labels, monthIndex, savedEvents, selectedEvent, showEventModal, smallCalendarMonth]);
 
   return (
     <GlobalContext.Provider value={obj}>
